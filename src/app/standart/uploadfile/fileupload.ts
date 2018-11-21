@@ -1,11 +1,11 @@
 export class Fileupload {
     constructor(
-        public file: File = null,
+        public file,
         public name: string = '',
         public format : string = '',
-        public url : string = '',
+        public url,
         public nameupload : string = '',
-        public type : string = '',
+        public type : File = null,
 
 
     ) { }

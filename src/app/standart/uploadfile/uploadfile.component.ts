@@ -10,7 +10,7 @@ import {NgForm} from "@angular/forms";
 })
 export class UploadfileComponent implements OnInit {
 
-  FileSave :  Array<Fileupload> = [];
+    FileSave :  Array<Fileupload> = [];
   FileMax: boolean = false;
   fileStart = 0;
   fileEnd = 10;
@@ -55,9 +55,6 @@ this.allFile = new Array();
 
       reader.onload = () =>
       {
-
-
-
 
         this.FileSave.push(new Fileupload(reader.result,file.name,file.type,reader.result));
 
@@ -137,8 +134,8 @@ this.allFile = new Array();
 defaultlimiteUpload()
 {
   this.limitFile = 5;
-  this.FileSave = null;
   this.FileSave = new Array();
+
   this.FileMax = false;
   console.log( this.limitFile);
 }
@@ -146,7 +143,7 @@ defaultlimiteUpload()
     initFile()
     {
       this.FileMax = false;
-      this.FileSave = null;
+
       this.FileSave = new Array();
     }
 }
