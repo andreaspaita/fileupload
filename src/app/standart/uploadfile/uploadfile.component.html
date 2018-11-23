@@ -1,6 +1,8 @@
 
 <div class="col-md-2"><label>change limite files</label>
   <input class="form-control" type="number" name="limite" (focusout)="limitUpload($event)"><br/>
+  <label>change limite files default : 5000000 = 5MO </label>
+  <input class="form-control" type="number" name="limiteSize" (focusout)="limitSizeUpload($event)"><br/>
   <label>Default limite upload</label><br/>
   <div class="col-md-4">
     <button type="button" class="btn btn-success" (click)=" defaultlimiteUpload()" >Init limit file upload</button>
@@ -13,8 +15,7 @@
     <button type="button" class="btn btn-success" (click)=" chnageDisplaynonenon()" >display block</button>
   </div></div>
 <div class="col-md-8">
-
-<div class="col-md-12"></div><br/>
+  <div class="col-md-6">
   <label >Vos image</label>
   <div class="form-group" [hidden]="FileMax">
 
@@ -29,6 +30,7 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">nom</th>
+      <th scope="col">size</th>
       <th scope="col"> visualisé</th>
       <th scope="col">supprimer</th>
 
@@ -38,13 +40,14 @@
     <tr *ngFor="let picture of FileSave ; let i = index">
       <th scope="row">{{i + 1}}</th>
       <td>{{picture.name}}</td>
+      <td>{{picture.size}}</td>
       <td><img [src]="picture.url" style="with:50px;height: 50px"/></td>
       <td><span class="glyphicon glyphicon-remove" (click)="deleteFile(i)" style="color:darkred"></span></td>
     </tr>
     </tbody>
   </table>
 <div [hidden]="addfileButton">
-  <div class="col-md-2">
+  <div class="col-md-4">
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#flipFlop" >
     Ajouter Image
   </button>
@@ -58,7 +61,31 @@
     </button>
   </div>
 
+  </div>
+  <div class="col-md-6">
+<h2>Size superior at 5.0 MO</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">nom</th>
+      <th scope="col">size</th>
+      <th scope="col"> visualisé</th>
+      <th scope="col">supprimer</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let picture of FileNotUpload ; let i = index">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{picture.name}}</td>
+      <td>{{picture.size}}</td>
+      <td><img [src]="picture.url" style="with:50px;height: 50px"/></td>
+      <td><span class="glyphicon glyphicon-remove" (click)="deleteFile(i)" style="color:darkred"></span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
 <div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
 

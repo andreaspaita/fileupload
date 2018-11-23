@@ -6,7 +6,7 @@ export class Fileupload {
         public url,
         public nameupload : string = '',
         public type : File = null,
-
+        public size : string = null,
 
     ) { }
 }

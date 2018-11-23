@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Fileupload } from './fileupload';
-
+import { UploadfileService } from './uploadfile.service';
 import {NgForm} from "@angular/forms";
 
 @Component({
@@ -11,6 +11,7 @@ import {NgForm} from "@angular/forms";
 export class UploadfileComponent implements OnInit {
 
     FileSave :  Array<Fileupload> = [];
+    FileNotUpload : Array<Fileupload> = [];
   FileMax: boolean = false;
   fileStart = 0;
   fileEnd = 10;
@@ -20,30 +21,22 @@ export class UploadfileComponent implements OnInit {
   error;
   limitFile :number = 5;
   addfileButton :boolean = false;
-
-  constructor( ) {
-
+    units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    SizeFile :number =5000000;
+  constructor(private UploadfileService:UploadfileService ) {
+     this.fileStart =  this.UploadfileService.getfileStart() ;
+      this.fileEnd = this.UploadfileService.getfileEnd() ;
+     this.hiddenFile = this.UploadfileService.gethiddenFile() ;
+       this.limitFile =this.UploadfileService.getlimitFile() ;
+       this.addfileButton = this.UploadfileService.getaddfileButton();
+       this.allFile =  this.UploadfileService.getFileexist();
+       this.SizeFile = this.UploadfileService.getSizeFile();
 
 
 
   }
 
   ngOnInit() {
-this.allFile = new Array();
-    this.allFile.push({name:'file_1',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_2',url:'https://homepages.cae.wisc.edu/~ece533/images/baboon.png'});
-    this.allFile.push({name:'file_3',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_4',url:'https://homepages.cae.wisc.edu/~ece533/images/baboon.png'});
-    this.allFile.push({name:'file_5',url:'https://homepages.cae.wisc.edu/~ece533/images/boat.png'});
-    this.allFile.push({name:'file_6',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_7',url:'https://homepages.cae.wisc.edu/~ece533/images/boat.png'});
-    this.allFile.push({name:'file_8',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_9',url:'https://homepages.cae.wisc.edu/~ece533/images/monarch.png'});
-    this.allFile.push({name:'file_10',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_11',url:'https://homepages.cae.wisc.edu/~ece533/images/monarch.png'});
-    this.allFile.push({name:'file_12',url:'https://homepages.cae.wisc.edu/~ece533/images/airplane.png'});
-    this.allFile.push({name:'file_13',url:'https://homepages.cae.wisc.edu/~ece533/images/peppers.png'});
-
 
   }
   onFileChange(event) {
@@ -53,22 +46,52 @@ this.allFile = new Array();
       const [file] = event.target.files;
       reader.readAsDataURL(file);
 
-      reader.onload = () =>
-      {
-
-        this.FileSave.push(new Fileupload(reader.result,file.name,file.type,reader.result));
-
-        if(this.FileSave.length >= this.limitFile )
+       let taille = this.niceBytes(file.size);
+       // let taille = this.niceBytes(50000* 100);
+        console.log(taille);
+        if(file.size <= this.SizeFile)
         {
-          this.FileMax = true;
+            reader.onload = () =>
+            {
+                console.log(reader.result);
+
+
+                this.FileSave.push(new Fileupload(reader.result,file.name,file.type,reader.result,null,null,taille));
+                console.log(this.FileSave);
+                this.UploadfileService.setFileSave( this.FileSave);
+                if(this.FileSave.length >= this.limitFile )
+                {
+                    this.FileMax = true;
+                }
+
+
+
+            };
+        }else{
+            reader.onload = () =>
+            {
+
+
+
+                this.FileNotUpload.push(new Fileupload(reader.result,file.name,file.type,reader.result,null,null,taille));
+
+
+
+
+            };
+
         }
 
-
-
-      };
     }
   }
 
+
+     niceBytes(x){
+    let l = 0, n = parseInt(x, 10) || 0;
+    while(n >= 1024 && ++l)
+        n = n/1024;
+    return(n.toFixed(n >= 10 || l < 1 ? 0 : 1) + ' ' + this.units[l]);
+}
   deleteFile(i)
   {
 
@@ -117,6 +140,11 @@ this.allFile = new Array();
 
     this.limitFile = event.target.value;
   }
+    limitSizeUpload(event)
+    {
+
+        this.SizeFile = event.target.value;
+    }
 
   chnageDisplaynoneoui()
 {
@@ -137,7 +165,7 @@ defaultlimiteUpload()
   this.FileSave = new Array();
 
   this.FileMax = false;
-  console.log( this.limitFile);
+
 }
 
     initFile()

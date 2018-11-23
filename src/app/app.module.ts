@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { UploadfileComponent } from './standart/uploadfile/uploadfile.component';
-
+import { UploadfileService } from './standart/uploadfile/uploadfile.service';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [UploadfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
